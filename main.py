@@ -8,8 +8,8 @@ import cv2
 import os
 
 app = Flask(__name__)
-app.config['UPLOADED_IMAGES_DEST'] = 'static/images'
-app.config['UPLOAD_FOLDER'] = 'static'
+# app.config['UPLOADED_IMAGES_DEST'] = 'media/images'
+# app.config['UPLOAD_FOLDER'] = 'media'
 model = load_model('MobileNetV3Small.h5')
 
 def contrast_adjustment(img, alpha=1.2, beta=1):
@@ -23,12 +23,12 @@ def classify_disease():
 
       file = request.files['imageFile']
       file_name = secure_filename(file.filename)
-      file.save(f'static/images/{file_name}')
+      file.save(f'media/images/{file_name}')
 
-      img=cv2.imread(f'static/images/{file_name}')
+      img=cv2.imread(f'media/images/{file_name}')
       img=contrast_adjustment(img)
       resized_img=tf.image.resize(img, (224, 224))
-      cv2.imwrite(os.path.join('static', 'images',file_name ), img)
+      cv2.imwrite(os.path.join('media', 'images',file_name ), img)
       predictions=model.predict(np.expand_dims(resized_img, 0))
       idx = predictions.argmax()
       label = diseases_name[idx]
