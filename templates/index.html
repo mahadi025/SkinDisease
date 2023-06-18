@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Inflammatory Skin Diseases Classification</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <form method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <input type="file" class="form-control-file" name="imageFile" />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" name="submit" value="Upload"/>
+                    </div>
+                </form>
+                <p class="mt-4">Predicted Skin Disease: {{predictions}}</p>
+            </div>
+        </div>
+
+        {% if img %}
+            <div class="row justify-content-center mt-5">
+                <div class="col-md-6">
+                    <img src="static/images/{{(img)}}" alt="Uploaded Image" class="img-fluid">
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
