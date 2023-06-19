@@ -21,9 +21,14 @@ def classify_disease():
    if request.method == 'POST':
       diseases_name = ['Acne', 'Acnetic Keratosis', 'Basal Cell Carcinoma', 'Capillaritis', 'Eczema', 'Folliculitis', 'Impetigo', 'Keloids', 'Lichen Planus', 'Orf', 'Psoriasis', 'Rosacea', 'Scabies', 'Skin Tag', 'Syphilis', 'Tuberous Sclerosis', 'Varicella', 'Vitiligo']
 
-      file = request.files['imageFile']
-      file_name = secure_filename(file.filename)
-      file.save(f'media/images/{file_name}')
+      try:
+         file = request.files['imageFile1']
+         file_name = secure_filename(file.filename)
+         file.save(f'media/images/{file_name}')
+      except:
+         file = request.files['imageFile2']
+         file_name = secure_filename(file.filename)
+         file.save(f'media/images/{file_name}')
 
       img=cv2.imread(f'media/images/{file_name}')
       img=contrast_adjustment(img)
