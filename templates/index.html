@@ -7,7 +7,7 @@
 
 <body>
     <nav class="navbar navbar-expand-custom navbar-mainbg">
-        <a class="navbar-brand navbar-logo">Inflammatory Skin disease detection</a>
+        <!-- <a class="navbar-brand navbar-logo">Inflammatory Skin disease detection</a> -->
         <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
                 <a class="nav-link" href="#">Home</a>
@@ -25,30 +25,15 @@
     <div class="container">
         <h1>প্রদাহজনক ত্বকের রোগ সনাক্তকরণ সাইটে স্বাগতম</h1>
         <form method="post" enctype="multipart/form-data">
-            <label><input type="file" name="imageFile1" capture="user" accept="image/*" onclick="openCamera()">Take a Picture</label>
+            <label><input type="file" name="imageFile1" capture="user" accept="image/*">Take a Picture</label>
             <p>OR </p>
-            <label><input type="file" name="imageFile2" accept="image/*" onclick="openGallery()">Select From Gallery</label>
+            <label><input type="file" name="imageFile2" accept="image/*">Select From Gallery</label>
             <button class="btn btn-info btn-block" type="submit">Classify Disease </button>
         </form>
         <img src="../static/images/derm.png" height="500px" >
         <br>
         <p>Predicted Skin Disease: {{predictions}}</p>
     </div>
-    <script>
-
-        function setImageData(imageData) {
-            // Handle the image data received from Android
-            console.log(imageData);
-            // You can perform further processing or display the image in the HTML page
-        }
-        function openCamera() {
-            AndroidInterface.openCamera();
-        }
-
-        function openGallery() {
-            AndroidInterface.openGallery();
-        }
-    </script>
 </body>
 
 </html>

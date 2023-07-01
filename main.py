@@ -10,7 +10,7 @@ import os
 app = Flask(__name__)
 # app.config['UPLOADED_IMAGES_DEST'] = 'media/images'
 # app.config['UPLOAD_FOLDER'] = 'media'
-model = load_model('MobileNetV3Small.h5')
+model = load_model('models/MobileNet_with_augmentation_Acne_Eczema_Keloids_Psoriasis_Skin_Tag_Split_2_1.0_0.94_0.71.h5')
 
 def contrast_adjustment(img, alpha=1.2, beta=1):
     output = cv2.convertScaleAbs(img, alpha=alpha, beta=beta)
@@ -19,7 +19,32 @@ def contrast_adjustment(img, alpha=1.2, beta=1):
 @app.route('/', methods=['GET', 'POST'])
 def classify_disease():
    if request.method == 'POST':
-      diseases_name = ['Acne', 'Acnetic Keratosis', 'Basal Cell Carcinoma', 'Capillaritis', 'Eczema', 'Folliculitis', 'Impetigo', 'Keloids', 'Lichen Planus', 'Orf', 'Psoriasis', 'Rosacea', 'Scabies', 'Skin Tag', 'Syphilis', 'Tuberous Sclerosis', 'Varicella', 'Vitiligo']
+      # diseases_name = [
+      # 'Acne', 
+      # 'Acnetic Keratosis', 
+      # 'Basal Cell Carcinoma', 
+      # 'Capillaritis', 
+      # 'Eczema', 
+      # 'Folliculitis', 
+      # 'Impetigo', 
+      # 'Keloids', 
+      # 'Lichen Planus', 
+      # 'Orf', 
+      # 'Psoriasis', 
+      # 'Rosacea', 
+      # 'Scabies', 
+      # 'Skin Tag', 
+      # 'Syphilis', 
+      # 'Tuberous Sclerosis', 
+      # 'Varicella', 
+      # 'Vitiligo']
+      diseases_name=[
+         'Acne',
+         'Eczema',
+         'Keloids', 
+         'Psoriasis', 
+         'Skin Tag'
+      ]
 
       try:
          file = request.files['imageFile1']
