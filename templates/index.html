@@ -2,38 +2,71 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="../static/css/demo.css">
+    <link rel="stylesheet" type="text/css" href="../static/css/main.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-custom navbar-mainbg">
-        <!-- <a class="navbar-brand navbar-logo">Inflammatory Skin disease detection</a> -->
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Home</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Terms of Use</a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="">About</a>
-            </li>
-        </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info">
+        <a class="navbar-brand" href="{{url_for('home')}}">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                </li>
+            </ul>
+
+            {% if current_user.is_active %}
+            <a class="navbar-brand" style="display: inline-block; float: right" href="{{url_for('view_profile')}}">Welcome {{current_user.username}}</a>
+            {% endif %}
+            <div class="form-inline my-2 my-lg-0">
+                <a href="{{url_for('logout')}}" class="btn btn-danger">Logout</a>
+            </div>
         </div>
     </nav>
-
-    <div class="container">
-        <h1>প্রদাহজনক ত্বকের রোগ সনাক্তকরণ সাইটে স্বাগতম</h1>
-        <form method="post" enctype="multipart/form-data">
-            <label><input type="file" name="imageFile1" capture="user" accept="image/*">Take a Picture</label>
-            <p>OR </p>
-            <label><input type="file" name="imageFile2" accept="image/*">Select From Gallery</label>
-            <button class="btn btn-info btn-block" type="submit">Classify Disease </button>
-        </form>
-        <img src="../static/images/derm.png" height="500px" >
-        <br>
-        <p>Predicted Skin Disease: {{predictions}}</p>
+    <div class="container-sm" style="min-height: 100vh;">
+        <div class="d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
+            <h1 class="text-center mb-6">প্রদাহজনক ত্বকের রোগ সনাক্তকরণ সাইটে স্বাগতম</h1>
+            <img src="../static/images/derm.png" style="border-radius: 50%">
+            <br>
+            <form method="post" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <div class="row justify-content-center mb-3">
+                    <label for="fileInput1" class="btn btn-info">Take a Picture</label>
+                    <input type="file" id="fileInput1" name="imageFile1" capture="user" accept="image/*" onchange="showClassifyButton()" style="display: none;">
+                </div>
+                <div class="row justify-content-center mb-3">
+                    <label for="fileInput2" class="btn btn-info">Select From Gallery</label>
+                    <input type="file" id="fileInput2" name="imageFile2" accept="image/*" onchange="showClassifyButton()" style="display: none;">
+                </div>
+                <br>
+                <div class="row justify-content-center">
+                    <button id="classifyButton" class="btn btn-success d-none" type="submit">Classify Disease</button>
+                </div>
+            </form>
+            <p class="text-center alert-info ">{{prediction}}</p>
+        </div>
     </div>
+    
+    <script>
+        function showClassifyButton() {
+            var fileInput1 = document.getElementById('fileInput1');
+            var fileInput2 = document.getElementById('fileInput2');
+            var classifyButton = document.getElementById('classifyButton');
+    
+            if (fileInput1.files.length > 0 || fileInput2.files.length > 0) {
+                classifyButton.classList.remove('d-none');
+            } else {
+                classifyButton.classList.add('d-none');
+            }
+        }
+    </script>
+    
+    
 </body>
-
 </html>
