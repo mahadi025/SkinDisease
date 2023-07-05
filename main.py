@@ -12,6 +12,7 @@ import os
 from werkzeug.utils import secure_filename
 from config import *
 from db import *
+import datetime
 
 app, __,model = start()
 
@@ -93,64 +94,55 @@ def edit_profile():
 
     return render_template('edit_profile.html', user=user, form=form)
 
+
+def classify_disease(img, username):
+    diseases_name=[
+        'Acne', 
+        'Eczema', 
+        'Keloids', 
+        'Psoriasis', 
+        'Skin_Tag'
+    ]
+    img=contrast_adjustment(img)
+    resized_img=tf.image.resize(img, (224, 224))
+    prediction=model.predict(np.expand_dims(resized_img, 0))
+    idx = prediction.argmax()
+    label = diseases_name[idx]
+    time=datetime.datetime.now().strftime("%H_%M_%S_")
+    if not os.path.isdir(f'saved_disease/{username}'):
+        os.makedirs(f'saved_disease/{username}')
+    cv2.imwrite(os.path.join('saved_disease', username,f'{username}_{time}_{label}.jpg' ), img)
+    print(f'{username}_{datetime.datetime.now()}_{label}.jpg')
+    return idx
+
 @app.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
-   form=ClassifyDisease()
-   if request.method == 'POST':
-      # diseases_name = [
-      # 'Acne', 
-      # 'Acnetic Keratosis', 
-      # 'Basal Cell Carcinoma', 
-      # 'Capillaritis', 
-      # 'Eczema', 
-      # 'Folliculitis', 
-      # 'Impetigo', 
-      # 'Keloids', W
-      # 'Lichen Planus', 
-      # 'Orf', 
-      # 'Psoriasis', 
-      # 'Rosacea', 
-      # 'Scabies', 
-      # 'Skin Tag', 
-      # 'Syphilis', 
-      # 'Tuberous Sclerosis', 
-      # 'Varicella', 
-      # 'Vitiligo']
-      
-    #   diseases_name=[
-    #      'Acne',
-    #      'Eczema',
-    #      'Keloids', 
-    #      'Psoriasis', 
-    #      'Skin Tag'
-    #   ]
-      diseases_name=[
-         'মুখকোষ্ঠ /ব্রণ',
-         'একজেমা/পামা/বিখাউজ',
-         'কেলোইড',
-         'সোরিয়াসিস',
-         'স্কিন ট্যাগ',
-        ]
-      try:
-         file = request.files['imageFile1']
-         file_name = secure_filename(file.filename)
-         file.save(f'media/images/{file_name}')
-      except:
-         file = request.files['imageFile2']
-         file_name = secure_filename(file.filename)
-         file.save(f'media/images/{file_name}')
+    form=ClassifyDisease()
+    diseases_name=[
+        'Acne', 
+        'Eczema', 
+        'Keloids', 
+        'Psoriasis', 
+        'Skin_Tag'
+    ]
+    if request.method == 'POST':
+        try:
+            file = request.files['imageFile1']
+            file_name = secure_filename(file.filename)
+            file.save(f'media/images/{file_name}')
+        except:
+            file = request.files['imageFile2']
+            file_name = secure_filename(file.filename)
+            file.save(f'media/images/{file_name}')
 
-      img=cv2.imread(f'media/images/{file_name}')
-      img=contrast_adjustment(img)
-      resized_img=tf.image.resize(img, (224, 224))
-      cv2.imwrite(os.path.join('media', 'images',file_name ), img)
-      predictions=model.predict(np.expand_dims(resized_img, 0))
-      idx = predictions.argmax()
-      label = f'Predicted Skin Disease: {diseases_name[idx]}'
-      return render_template('index.html', prediction=label, img=file_name, current_user=current_user, form=form)
-   else:
-      return render_template('index.html', form=form)
+        img=cv2.imread(f'media/images/{file_name}')
+        idx=classify_disease(img, str(current_user))
+        label=diseases_name[idx]
+        output=f'Predicted Disease: {label}'
+        return render_template('index.html', prediction=output, img=file_name, current_user=current_user, form=form)
+    else:
+        return render_template('index.html', form=form)
 
 if __name__ == '__main__':
    login_manager.init_app(app)

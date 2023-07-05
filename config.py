@@ -46,11 +46,12 @@ def login_required(f):
         if 'logged_in' in session:
             return f(*args, **kwargs)
         else:
-            flash("You need to login first")
+            flash("You need to login first to access the website")
             return redirect(url_for('login'))
     return wrap
 
 
 def start():
-    model = load_model('models/MobileNet_with_augmentation_Acne_Eczema_Keloids_Psoriasis_Skin_Tag_Split_2_1.0_0.94_0.71.h5')
+    model_name='MobileNet_with_augmentation_Acne_Eczema_Keloids_Psoriasis_Skin_Tag_Split_2_1.0_0.94_0.72.h5'
+    model = load_model(f'models/{model_name}')
     return app, admin, model
