@@ -9,7 +9,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import current_user, login_user, login_required
 from forms import *
 import os
-from werkzeug.utils import secure_filename
 from config import *
 from db import *
 import datetime
@@ -101,7 +100,7 @@ def classify_disease(img, username):
         'Eczema', 
         'Keloids', 
         'Psoriasis', 
-        'Skin_Tag'
+        'Skin Tag'
     ]
     img=contrast_adjustment(img)
     resized_img=tf.image.resize(img, (224, 224))
@@ -124,18 +123,12 @@ def home():
         'Eczema', 
         'Keloids', 
         'Psoriasis', 
-        'Skin_Tag'
+        'Skin Tag'
     ]
     if request.method == 'POST':
-        try:
-            file = request.files['imageFile1']
-            file_name = secure_filename(file.filename)
-            file.save(f'media/images/{file_name}')
-        except:
-            file = request.files['imageFile2']
-            file_name = secure_filename(file.filename)
-            file.save(f'media/images/{file_name}')
-
+        file = request.files['imageFile1']
+        file_name = secure_filename(file.filename)
+        file.save(f'media/images/{file_name}')
         img=cv2.imread(f'media/images/{file_name}')
         idx=classify_disease(img, str(current_user))
         label=diseases_name[idx]

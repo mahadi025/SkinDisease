@@ -34,32 +34,40 @@
             <h1 class="text-center mb-6">প্রদাহজনক ত্বকের রোগ সনাক্তকরণ সাইটে স্বাগতম</h1>
             <img src="../static/images/derm.png" style="border-radius: 50%">
             <br>
-            <form method="post" enctype="multipart/form-data">
+            <form id="myform" method="post" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
                 <div class="row justify-content-center mb-3">
-                    <label for="fileInput1" class="btn btn-info">Take a Picture</label>
+                    <button type="button" class="btn btn-info" onclick="takePhoto();">Upload a Picture</button>
                     <input type="file" id="fileInput1" name="imageFile1" capture="user" accept="image/*" onchange="showClassifyButton()" style="display: none;">
                 </div>
-                <div class="row justify-content-center mb-3">
-                    <label for="fileInput2" class="btn btn-info">Select From Gallery</label>
+                <!-- <div class="row justify-content-center mb-3">
+                    <button type="button" class="btn btn-info" onclick="takePhotoFromGallery();">Select From Gallery</button>
                     <input type="file" id="fileInput2" name="imageFile2" accept="image/*" onchange="showClassifyButton()" style="display: none;">
-                </div>
+                </div> -->
                 <br>
                 <div class="row justify-content-center">
                     <button id="classifyButton" class="btn btn-success d-none" type="submit">Classify Disease</button>
                 </div>
             </form>
-            <p class="text-center alert-info">{{prediction}}</p>
+            <p class="text-center alert-danger">{{prediction}}</p>
         </div>
     </div>
     
     <script>
+        function takePhoto() {
+            document.getElementById("fileInput1").click();
+        }
+    
+        function takePhotoFromGallery() {
+            document.getElementById("fileInput2").click();
+        }
+    
         function showClassifyButton() {
             var fileInput1 = document.getElementById('fileInput1');
-            var fileInput2 = document.getElementById('fileInput2');
+            // var fileInput2 = document.getElementById('fileInput2');
             var classifyButton = document.getElementById('classifyButton');
     
-            if (fileInput1.files.length > 0 || fileInput2.files.length > 0) {
+            if (fileInput1.files.length > 0) {
                 classifyButton.classList.remove('d-none');
             } else {
                 classifyButton.classList.add('d-none');
@@ -67,6 +75,4 @@
         }
     </script>
     
-    
-</body>
 </html>
