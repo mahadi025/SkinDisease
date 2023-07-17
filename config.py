@@ -8,7 +8,7 @@ from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager
 from flask import redirect, url_for, session, flash
 from functools import wraps
-
+import os
 
 photos = UploadSet('images', IMAGES)
 
@@ -52,6 +52,8 @@ def login_required(f):
 
 
 def start():
+    if not os.path.isdir('saved_disease'):
+        os.makedirs('saved_disease')
     model_name='MobileNet_with_augmentation_Acne_Eczema_Keloids_Psoriasis_Skin_Tag_Split_2_1.0_0.94_0.72.h5'
     model = load_model(f'models/{model_name}')
     return app, admin, model
