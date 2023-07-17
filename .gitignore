@@ -2,3 +2,4 @@ media/images/*.jpg
 media/images/*.png
 saved_disease
 __pycache__
+models

@@ -18,7 +18,7 @@ app.secret_key = 'super secret key'
 app.config['DEBUG'] = True
 app.config['MONGODB_SETTINGS'] = {
     'db': 'skin-disease',
-    'host': 'localhost',
+    'host': 'mongodb+srv://mahadi025:159753@skindisease.q2mwiqt.mongodb.net/?retryWrites=true&w=majority',
     'port': 27017
 }
 

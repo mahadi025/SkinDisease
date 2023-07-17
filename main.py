@@ -100,7 +100,7 @@ def classify_disease(img, username):
         'Eczema', 
         'Keloids', 
         'Psoriasis', 
-        'Skin Tag'
+        'Skin-Tag'
     ]
     img=contrast_adjustment(img)
     resized_img=tf.image.resize(img, (224, 224))
@@ -111,7 +111,6 @@ def classify_disease(img, username):
     if not os.path.isdir(f'saved_disease/{username}'):
         os.makedirs(f'saved_disease/{username}')
     cv2.imwrite(os.path.join('saved_disease', username,f'{username}_{time}_{label}.jpg' ), img)
-    print(f'{username}_{datetime.datetime.now()}_{label}.jpg')
     return idx
 
 @app.route('/', methods=['GET', 'POST'])
