@@ -25,7 +25,6 @@ class UserEditForm(FlaskForm):
     name = StringField('Name', validators=[InputRequired()])
     username = StringField('Username', validators=[InputRequired()])
     email = StringField('Email', validators=[InputRequired()])
-    phone = StringField('Phone', default="+880....")
 
 class ClassifyDisease(FlaskForm):
     pass

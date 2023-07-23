@@ -6,14 +6,18 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Edit Profile</title>
 	<link rel="stylesheet" type="text/css" href="../static/css/edit_profile.css">
+	<link rel="icon" type="image/x-icon" href="../static/images/becteria.png">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 <body>
-	<div id="header">
-		<br>
-		<a href="{{ url_for('view_profile') }}" id="back"><img src="../static/images/back button.png" id="backbtn"></a>
-	</div>
-		<div>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-info">
+        <a href="{{ url_for('home') }}" id="back"><img src="../static/images/back button.png" id="backbtn"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        </button>
+    </nav>
+
+	<div class="container-sm" style="min-height: 100vh;">
+		<div class="d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
 			<form method="POST" enctype="multipart/form-data">
 				<table>
 					{{ form.hidden_tag() }}
@@ -24,13 +28,10 @@
 						<th>{{form.email.label}}</th>
 						<td>{{form.email}}</td>
 					</tr>
-					<tr>
-						<th>{{form.phone.label}}</th>
-						<td>{{form.phone}}</td>
-					</tr>
 				<table>
 					<td><button type="submit" class="btn btn-primary">Save</button></td>
 			</form>
 		</div>
+	</div>
 </body>
 </html>

@@ -66,6 +66,11 @@ def login():
         return render_template('login.html', form=form)
 
 
+@app.route('/instructions')
+@login_required
+def instructions():
+    return render_template('instructions.html')
+
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
     if current_user.is_active:
@@ -89,6 +94,7 @@ def edit_profile():
     form = UserEditForm(obj=user)
     if request.method == "POST":
         form.populate_obj(user)
+        user.save()
         return redirect(url_for('view_profile'))
 
     return render_template('edit_profile.html', user=user, form=form)

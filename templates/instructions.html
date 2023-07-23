@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Instructions</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-info">
+        <a class="navbar-brand" href="{{url_for('home')}}">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                </li>
+            </ul>
+
+            {% if current_user.is_active %}
+            <a class="navbar-brand" style="display: inline-block; float: right" href="{{url_for('view_profile')}}">Welcome {{current_user.username}}</a>
+            {% endif %}
+            <div class="form-inline my-2 my-lg-0">
+                <a href="{{url_for('logout')}}" class="btn btn-danger">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-sm" style="min-height: 100vh;">
+        <div class="d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">
+            <h1 class="text-center mb-6">Instructions on how to upload the images</h1>
+            <ul class="list-group">
+                <li class="list-group-item" >Take a photo of your disease using your camera</li>
+                <li class="list-group-item">Make sure that there is no background noise</li>
+                <li class="list-group-item" >Make sure that affected area is clearly visible crop the image if needed</li>
+                <li class="list-group-item">Now upload the image</li>
+                <li class="list-group-item">Now press "Classify Disease" button to predict the disease</li>
+                <li class="list-group-item">
+                    Example <br>
+                    <img src="../static/images/Acne2.jpg" alt="" height="300px" width="300px">
+                    <img src="../static/images/Eczema2.jpg" alt="" height="300px" width="300px">
+                    <img src="../static/images/Psoriasis3.jpg" alt="" height="300px" width="300px">
+                </li>
+                <li class="list-group-item" ><a href="{{url_for('home')}}" class="btn btn-success btn-lg">OK</a></li>
+            </ul>
+            
+        </div>
+    </div>
+</body>
+</html>
