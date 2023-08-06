@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <title>হোম</title>
     <link rel="stylesheet" type="text/css" href="../static/css/main.css">
     <link rel="icon" type="image/x-icon" href="../static/images/becteria.png">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -12,7 +13,7 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-info">
-        <a class="navbar-brand" href="{{url_for('home')}}">Home</a>
+        <a class="navbar-brand" href="{{url_for('home')}}">হোম</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -23,10 +24,10 @@
             </ul>
 
             {% if current_user.is_active %}
-            <a class="navbar-brand" style="display: inline-block; float: right" href="{{url_for('view_profile')}}">Welcome {{current_user.username}}</a>
+            <a class="navbar-brand" style="display: inline-block; float: right" href="{{url_for('view_profile')}}">স্বাগত {{current_user.username}}</a>
             {% endif %}
             <div class="form-inline my-2 my-lg-0">
-                <a href="{{url_for('logout')}}" class="btn btn-danger">Logout</a>
+                <a href="{{url_for('logout')}}" class="btn btn-danger">লগ আউট করুন</a>
             </div>
         </div>
     </nav>
@@ -38,9 +39,9 @@
             <form id="myform" method="post" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
                 <div class="row justify-content-center mb-3">
-                    <a class="btn btn-secondary" href="{{url_for('instructions')}}">Instructions</a>
+                    <a class="btn btn-secondary" href="{{url_for('instructions')}}">নির্দেশাবলী</a>
                     <span style="margin-right: 10px;"></span>
-                    <button type="button" class="btn btn-info" onclick="takePhoto();">Upload a Picture</button>
+                    <a class="btn btn-info" onclick="takePhoto()">ছবি বাছাই করুন</a>
                     <input type="file" id="fileInput1" name="imageFile1" capture="user" accept="image/*" onchange="showClassifyButton()" style="display: none;">
                 </div>
                 <!-- <div class="row justify-content-center mb-3">
@@ -49,7 +50,7 @@
                 </div> -->
                 <br>
                 <div class="row justify-content-center">
-                    <button id="classifyButton" class="btn btn-success d-none" type="submit">Classify Disease</button>
+                    <button id="classifyButton" class="btn btn-success d-none" type="submit">রোগ শনাক্ত করুন</button>
                 </div>
             </form>
             <p class="text-center alert-danger">{{prediction}}</p>

@@ -18,7 +18,7 @@ app.secret_key = 'super secret key'
 app.config['DEBUG'] = True
 app.config['MONGODB_SETTINGS'] = {
     'db': 'skin-disease',
-    'host': 'mongodb+srv://mahadi025:159753@skindisease.q2mwiqt.mongodb.net/?retryWrites=true&w=majority',
+    'host': 'localhost',
     'port': 27017
 }
 
@@ -46,7 +46,7 @@ def login_required(f):
         if 'logged_in' in session:
             return f(*args, **kwargs)
         else:
-            flash("You need to login first to access the website")
+            flash("ওয়েবসাইট অ্যাক্সেস করার জন্য আপনাকে প্রথমে লগ-ইন করতে হবে")
             return redirect(url_for('login'))
     return wrap
 
@@ -54,6 +54,6 @@ def login_required(f):
 def start():
     if not os.path.isdir('saved_disease'):
         os.makedirs('saved_disease')
-    model_name='MobileNet_with_augmentation_Acne_Eczema_Keloids_Psoriasis_Skin_Tag_Split_2_1.0_0.94_0.72.h5'
+    model_name='MobileNet_with_augmentation_Acne_Eczema_Keloids_Psoriasis_Skin_Tag_Split_2_0.99_1.0_0.71_(12_03_43).h5'
     model = load_model(f'models/{model_name}')
     return app, admin, model

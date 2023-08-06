@@ -4,11 +4,9 @@ from werkzeug.utils import secure_filename
 import numpy as np
 import cv2
 import os
-from flask import render_template, request, redirect, url_for, session, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import current_user, login_user, login_required
 from forms import *
-import os
 from config import *
 from db import *
 import datetime
@@ -31,10 +29,10 @@ def registration():
             password = request.form['password1']
             confirm_password = request.form['password2']
             if password != confirm_password:
-                flash('Passwords do not match')
+                flash('পাসওয়ার্ড মিলছে না')
                 return redirect(url_for('registration'))
             if User.objects(username=username) or User.objects(email=email):
-                flash('Username or email already exists')
+                flash('ব্যবহারকারীর নাম বা ইমেল ইতিমধ্যেই বিদ্যমান৷')
                 return redirect(url_for('registration'))
             user = User(username=username, name=name,email=email,
                         password=generate_password_hash(password))
@@ -50,20 +48,32 @@ def login():
         return redirect(url_for('home'))
     else:
         form = UserLoginForm()
-        if request.method == 'POST':
-            username = request.form['username']
-            password = request.form['password']
-            user = User.objects.get(username=username)
-            if user and check_password_hash(user['password'], password):
+        try:
+            try:
+                if request.method == 'POST':
+                    username = request.form['username']
+                    password = request.form['password']
+                    user = User.objects.get(username=username)
+                    if user and check_password_hash(user['password'], password):
+                        login_user(user)
+                        session['logged_in'] = True
+                        user.is_active = True
+                        current_user.is_active=True
+                        user.is_anonymous=False
+                        user.save()
+                        return redirect(url_for('home'))
+                    else:
+                        flash('ব্যবহারকারী নাম বা পাসওয়ার্ড ভুল দেওয়া হয়েছে')
+            except Exception as e:
                 login_user(user)
                 session['logged_in'] = True
                 user.is_active = True
                 user.is_anonymous=False
                 user.save()
                 return redirect(url_for('home'))
-            else:
-                flash('Username or Password is incorrect')
-        return render_template('login.html', form=form)
+        except Exception as e:
+            flash('ব্যবহারকারী নাম পাওয়া যায় নি') 
+    return render_template('login.html', form=form)
 
 
 @app.route('/instructions')
@@ -73,11 +83,14 @@ def instructions():
 
 @app.route('/logout', methods=['GET', 'POST'])
 def logout():
-    if current_user.is_active:
+    try:
         user=User.objects.get(username=current_user.username)
         user.is_active=False
+        current_user.is_active=False
         user.save()
-    session.clear()
+        session.clear()
+    except Exception as e:
+        session.clear()
     return redirect(url_for('home'))
 
 @app.route('/view_profile', methods=['GET', 'POST'])
@@ -114,9 +127,13 @@ def classify_disease(img, username):
     idx = prediction.argmax()
     label = diseases_name[idx]
     time=datetime.datetime.now().strftime("%H_%M_%S_")
-    if not os.path.isdir(f'saved_disease/{username}'):
-        os.makedirs(f'saved_disease/{username}')
-    cv2.imwrite(os.path.join('saved_disease', username,f'{username}_{time}_{label}.jpg' ), img)
+    try:
+        if not os.path.isdir(f'saved_disease/{username}'):
+            os.makedirs(f'saved_disease/{username}')
+        cv2.imwrite(os.path.join('saved_disease', username,f'{username}_{time}_{label}.jpg' ), img)
+    except Exception as e:
+        os.makedirs(f'saved_disease/random')
+        cv2.imwrite(os.path.join('saved_disease', username,f'random_{time}_{label}.jpg' ), img)
     return idx
 
 @app.route('/', methods=['GET', 'POST'])
@@ -124,11 +141,16 @@ def classify_disease(img, username):
 def home():
     form=ClassifyDisease()
     diseases_name=[
-        'Acne', 
-        'Eczema', 
-        'Keloids', 
-        'Psoriasis', 
-        'Skin Tag'
+        # 'Acne', 
+        # 'Eczema', 
+        # 'Keloids', 
+        # 'Psoriasis', 
+        # 'Skin Tag'
+        'মুখকোষ্ঠ /ব্রণ',
+        'একজেমা/পামা,/বিখাউজ',
+        'কেলোইড',
+        'সোরিয়াসিস',
+        'স্কিন ট্যাগ'
     ]
     if request.method == 'POST':
         file = request.files['imageFile1']
@@ -137,7 +159,7 @@ def home():
         img=cv2.imread(f'media/images/{file_name}')
         idx=classify_disease(img, str(current_user))
         label=diseases_name[idx]
-        output=f'Predicted Disease: {label}'
+        output=f'শনাক্তকৃত রোগ: {label}'
         return render_template('index.html', prediction=output, img=file_name, current_user=current_user, form=form)
     else:
         return render_template('index.html', form=form)
